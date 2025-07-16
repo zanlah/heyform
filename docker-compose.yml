@@ -4,7 +4,7 @@ networks:
 
 services:
   heyform:
-    image: my-heyform:latest
+    image: zanlah/heyform-slovenian:latest
     restart: always
     volumes:
       # Persist uploaded images
