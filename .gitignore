@@ -36,4 +36,4 @@ lib
 packages/server/static
 *.tsbuildinfo
 
-docker-compose.yml
+

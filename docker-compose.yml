@@ -1,0 +1,47 @@
+networks:
+  keydb:
+  mongo:
+
+services:
+  heyform:
+    image: my-heyform:latest
+    restart: always
+    volumes:
+      # Persist uploaded images
+      - ./assets:/app/static/upload
+    depends_on:
+      - mongo
+      - keydb
+    ports:
+      - "9513:8000"
+    environment:
+      APP_HOMEPAGE_URL: ${APP_HOMEPAGE_URL}
+      SESSION_KEY: ${SESSION_KEY}
+      FORM_ENCRYPTION_KEY: ${FORM_ENCRYPTION_KEY}
+      MONGO_URI: ${MONGO_URI}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      SMTP_FROM: ${SMTP_FROM}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
+
+  mongo:
+    image: percona/percona-server-mongodb:latest
+    restart: always
+    volumes:
+      # Persist MongoDB data
+      - mongodb_data:/data/db
+
+  keydb:
+    image: eqalpha/keydb:latest
+    restart: always
+    command: keydb-server --appendonly yes --protected-mode no
+    volumes:
+      # Persist KeyDB data
+      - keydb:/data
+
+volumes:
+  mongodb_data:
+  keydb:
